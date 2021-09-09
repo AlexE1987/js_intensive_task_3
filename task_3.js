@@ -1,17 +1,10 @@
 Array.prototype.myFilter = function myFilter(callback, thisArg) {
-  if (this == null) throw new Error('Invalid data');
-  if (typeof callback !== 'function') throw new Error('Callback is not a function');
-
-  let arrayContext = this;
-  let argsContainer = Object(this);
-
-  if (arguments.length > 1) arrayContext = thisArg;
-
-  let filteredArray = this.reduce((newArray, element, index, argsContainer) => {
-    if (index in argsContainer) {
-      if (callback.call(arrayContext, element, argsContainer, index)) newArray.push(element);
-      return newArray;
+  let filteredArray = this.reduce((newArray, element, index) => {
+    if (arguments.length > 1) {
+      if (callback.call(thisArg, element, this, index)) newArray.push(element);
     }
+    if (callback.call(this, element, this, index)) newArray.push(element);
+    return newArray;
   }, []);
 
   return filteredArray;
